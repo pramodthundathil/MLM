@@ -1,0 +1,266 @@
+{% extends 'index.html' %}{%load static%}{% block content %}
+
+<style>
+    .cart-container {
+        width: 100%;
+        margin: 30px auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-header {
+        font-size: 24px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .cart-item {
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .item-details {
+        width: 75%;
+    }
+
+    .item-name {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .item-name img {
+        float: left;
+        margin-right: 20px;
+    }
+
+    .item-details span {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .item-actions {
+        width: 100%;
+        text-align: right;
+        padding: 20px;
+    }
+
+    .item-price {
+        font-size: 20px;
+        color: #b12704;
+        margin-bottom: 5px;
+    }
+
+    .item-old-price {
+        text-decoration: line-through;
+        color: #767676;
+        font-size: 14px;
+    }
+
+    .proceed-to-buy {
+
+        align-items: center;
+        padding: 20px 0;
+        border-top: 2px solid #eee;
+    }
+
+    .subtotal {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .proceed-button {
+        background-color: #ffd814;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .proceed-button:hover {
+        background-color: #f7ca00;
+    }
+
+    .emi {
+        color: #007185;
+        font-size: 14px;
+        margin-top: 10px;
+        display: block;
+    }
+
+    .sidebar {
+        /* width: 30%; */
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        height: auto;
+    }
+
+    .sidebar h3 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .sidebar-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .sidebar-item img {
+        max-width: 50px;
+        margin-right: 10px;
+    }
+
+    .sidebar-item span {
+        font-size: 14px;
+    }
+
+    .sidebar-item .price {
+        font-weight: bold;
+        color: #b12704;
+    }
+
+    .sidebar-item .add-to-cart {
+        background-color: #ffd814;
+        border: none;
+        padding: 5px 10px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .sidebar-item .add-to-cart:hover {
+        background-color: #f7ca00;
+    }
+
+    .cart-main-container {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+
+<div class="container-fluid py-5 mt-5">
+    <div class="container-fluid">
+        <div class="row g-0 gx-5 align-items-end mt-5">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="section-header text-start  wow fadeInUp" data-wow-delay="0.1s"
+                            style="max-width: 500px;">
+                            <h3 class="h3 mb-3">Place Order</h3>
+                            {% for message in messages %}
+
+                            <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
+                                <strong>Alert!</strong> {{message}}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                            {% endfor %}
+                            <!-- <p>Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p> -->
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <a class="btn btn-outline-primary btn-sm" href="{%url 'Cart_Page' %}"><i class="bi bi-arrow-left-circle"></i>  Back To cart</a>
+                    </div>
+                </div>
+                <div class="col-lg-12 mt-3">
+                    <div class="cart-item">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="cart-item">
+                                    <div class="deliveryaddress"
+                                        style="padding: 20px ;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                                        <h6>Delivery Address</h6>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <table class="table">
+                                                    <tr>
+                                                        <td>Name</td>
+                                                        <th>{{D_address.first_name}}</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Address</td>
+                                                        <th>{{D_address.house_house}} <br>
+                                                            {{D_address.Place}} <br>
+                                                            {{D_address.City}} <br>
+                                                            {{D_address.district}} <br>
+                                                            {{D_address.state}}
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Phone</td>
+                                                        <th>{{D_address.phone_number}}</th>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="col-md-6 text-center">
+                                                <button class="btn btn-outline-dark">Change Delivery Address</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+
+                                <div class="sidebar text-light">
+                                    <h3>Order Details</h3>
+                                    <div class="sidebar-item mt-5">
+                                        <table class="table">
+                                            <tr>
+                                            <tr>
+                                                <td>
+                                                    BV Value
+                                                </td>
+                                                <th>
+                                                    <div class="text-primary">{{bv}}</div>
+                                                </th>
+                                            </tr>
+                                            <td>
+                                                Amount
+                                            </td>
+                                            <th>
+                                                <div class="price">₹{{total_price_defore_tax}}</div>
+                                            </th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    GST
+                                                </td>
+                                                <th>
+                                                    <div class="price"><small>₹{{total_tax}}</small></div>
+                                                </th>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    Total Amount
+                                                </td>
+                                                <th>
+                                                    <div class="price " style="font-size: larger;">₹{{total_price}}
+                                                    </div>
+                                                </th>
+                                            </tr>
+
+                                        </table>
+
+                                    </div>
+                                    <div class="d-grid gap-2 mt-3">
+                                        <a href="{%url 'Place_Order_Start' %}" class="btn btn-warning">Place Order</a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endblock %}

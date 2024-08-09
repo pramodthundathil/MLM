@@ -1,0 +1,201 @@
+{% extends 'index.html' %}{% block content %}
+<style>
+     * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 35px;
+        }
+
+        form#myForm {
+            margin: 20px auto;
+            width: fit-content;
+        }
+
+        .otp-container input {
+            border: none;
+            border-bottom: 2px solid #222222;
+            /* border: 2px solid #222222; */
+
+            /* padding: 10px 0px; */
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            outline: none;
+            font-weight: 500;
+        }
+
+        .otp-container {
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            padding: 13px 35px;
+            font-size: 15px;
+            border: none;
+            background: #327488;
+            color: #fff;
+            border-radius: 6px;
+            display: block;
+            margin: 0 auto;
+            margin-top: 25px;
+            cursor: pointer;
+        }
+</style>
+<div class="container-xxl py-6 mt-5">
+    <div class="container mt-4"
+        style="max-width: 720px;box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;padding: 20px; border-radius: 30px;">
+
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s"
+            style="max-width: 500px;">
+            <h1 class="display-5 mb-3">OTP VALIDATION</h1>
+            <p>Please Enter the otp sent to your mobile number or email id to Verify the details</p>
+            <hr><br>
+            {% for message in messages %}
+
+            <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
+                <strong>Alert!</strong> {{message}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+
+            <div>
+                
+                    <h2>Enter Your OTP</h2>
+                    <form action="{%url 'verify_otp' user.id %}" id="myForm" method="post" autocomplete="off">
+                        {% csrf_token %}
+                        <div class="otp-container">
+                            <input type="text" maxlength="1" name="one" required>
+                            <input type="text" maxlength="1" name="two" required>
+                            <input type="text" maxlength="1" name="three" required>
+                            <input type="text" maxlength="1" name="four" required>
+                        </div>
+                
+                        <input type="hidden" name="otp" id="otp">
+                
+                        <button type="submit" class="btn btn-primary btn-lg" >Verfy</button>
+                    </form>
+
+                        </div>
+                 
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script>
+  
+  var otpContainers = document.querySelectorAll('.otp-container');
+        var otpInput = document.getElementById('otp');
+
+        otpContainers.forEach(function (container) {
+            var inputs = container.querySelectorAll('input');
+            var inputsArray = Array.from(inputs);
+            // console.log(inputsArray);
+            function getMainOtp() {
+                var otpValue = inputsArray.map(function (input) {
+                    return input.value;
+                }).join('');
+                otpInput.value = otpValue;
+            }
+            inputsArray.forEach(function (input, index) {
+
+
+                input.addEventListener('input', function () {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                    if (this.value.length == 1 && index < inputsArray.length - 1) {
+                        inputsArray[index + 1].focus();
+                    }
+                    getMainOtp();
+                });
+
+                input.addEventListener('change', function () {
+                    getMainOtp();
+                });
+
+
+
+                input.addEventListener('paste', function (event) {
+                    event.preventDefault(); // Prevent the default paste behavior
+
+                    var pastedText = (event.clipboardData || window.clipboardData).getData('text');
+                    // Check if the pasted value consists of only four numbers
+                    if (/^\d{4}$/.test(pastedText)) {
+                        // Check if all the OTP fields are currently blank
+                        var allBlank = inputsArray.every(function (input) {
+                            return input.value === '';
+                        });
+                        if (allBlank) {
+                            // Paste the numbers one by one into the OTP fields
+                            pastedText.split('').forEach(function (char, i) {
+                                if (i < inputsArray.length) {
+                                    inputsArray[i].value = char;
+                                }
+                            });
+                            // Update #otp input field with concatenated values from OTP inputs
+                            var otpValue = inputsArray.map(function (input) {
+                                return input.value;
+                            }).join('');
+                            otpInput.value = otpValue;
+
+                            var lastInputWithValue = inputsArray.slice().reverse().find(function (input) {
+                                return input.value !== '';
+                            });
+                            lastInputWithValue.focus();
+                        }
+                    }
+                });
+
+
+
+
+                input.addEventListener('keydown', function (event) {
+                    if (event.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                        inputsArray[index - 1].focus();
+                        // console.log([index - 1]);
+                        inputsArray[index - 1].value = '';
+                    } else if (event.key.startsWith('Arrow') || event.key === 'Tab') {
+                        event.preventDefault();
+                    }
+                    getMainOtp();
+                });
+            });
+
+            container.addEventListener('click', function (event) {
+                var target = event.target;
+                // console.log(inputsArray);
+                if (target.tagName === 'INPUT') {
+                    var hasValue = inputsArray.some(function (input) {
+                        return input.value !== '';
+                    });
+                    if (hasValue) {
+                        var firstInputWithOutValue = inputsArray.slice().find(function (input) {
+                            return input.value === '';
+                        });
+                        if (firstInputWithOutValue) {
+                            firstInputWithOutValue.focus();
+                        } else {
+                            let lst =  inputsArray[3];
+                            lst.focus();
+                            lst.selectionStart = lst.selectionEnd = lst.value.length;   
+                        }
+                    } else {
+                        inputsArray[0].focus();
+                    }
+                    getMainOtp();
+                }
+            });
+        });
+
+
+      
+</script>
+
+
+
+{% endblock %}

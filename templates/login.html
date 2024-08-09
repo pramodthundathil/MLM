@@ -1,0 +1,58 @@
+{% extends 'index.html' %}
+{% block content%}
+<!-- Contact Start -->
+
+<div class="container-xxl py-6 mt-5">
+    <div class="container mt-4"
+        style="max-width: 720px;box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;padding: 20px; border-radius: 30px;">
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s"
+            style="max-width: 500px;">
+            <h1 class="display-5 mb-3">Signin</h1>
+            <p>Login To Your Account</p>
+            {% for message in messages %}
+
+            <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
+                <strong>Alert!</strong> {{message}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+
+        </div>
+        <div class="row g-5 justify-content-center">
+
+            <div class="col-lg-12 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+                <p class="mb-4"></p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="email" class="form-control" id="name" name="uname"
+                                    placeholder="Your Email">
+                                <label for="name">Email</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="password" class="form-control" id="email" name="pswd"
+                                    placeholder="Your Password">
+                                <label for="email">Password</label>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <button class="btn btn-primary rounded-pill py-3 px-5" type="submit">SignIn</button>
+                        </div>
+                    </div>
+                    <div class="mt-1 p-2">
+                        <a href="">Forgot password ?</a>
+                    </div>
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Contact End -->
+{% endblock %}

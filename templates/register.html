@@ -1,0 +1,199 @@
+{% extends 'index.html' %}
+{% block content%}
+
+<!-- Registration Start -->
+<div class="container-xxl py-6 mt-5">
+    <div class="container mt-4"
+        style="max-width: 960px;box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;padding: 20px; border-radius: 30px;">
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s"
+            style="max-width: 500px;">
+            <h1 class="display-5 mb-3">Registration</h1>
+            <p>Please Fill Out the Form To Complete Registration</p>
+            {% for message in messages %}
+
+            <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
+                <strong>Alert!</strong> {{message}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row g-5 justify-content-center">
+
+            <div class="col-lg-12 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+                <p class="mb-4"></p>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+
+                            <h4>Sponser: {{sponsor.first_name}} {{sponsor.last_name}}</h5>
+                        </div>
+                    </div>
+
+                </div>
+                <hr class="text-primary">
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <h6>Personal details</h6>
+                    <hr class="text-primary">
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="fname" id="fname" required
+                                    placeholder="First Name">
+                                <label for="name">First Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="lname" required id="lname"
+                                    placeholder="Last name">
+                                <label for="email">Last name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="date" class="form-control" name="dob" required id="lname"
+                                    placeholder="Last name">
+                                <label for="email">Date of Birth</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="number" class="form-control" required name="age" id="age"
+                                    placeholder="Age">
+                                <label for="email">Age</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" required name="village" id="village"
+                                    placeholder="Villege">
+                                <label for="email">Villege</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" required name="district" id="district"
+                                    placeholder="District">
+                                <label for="email">District</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-floating">
+                                <textarea type="text" class="form-control" required name="address" id="village"
+                                    style="height: 100px" placeholder="Address"></textarea>
+                                <label for="email">Address</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" required name="religion" id="religion"
+                                    placeholder="Religion">
+                                <label for="email">Religion</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" required name="cast" id="cast"
+                                    placeholder="Cast">
+                                <label for="email">Cast</label>
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="mt-5">Bank Details</h6>
+                    <hr class="text-primary">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" required name="pan" id="pancard"
+                                    placeholder="Pancar Number">
+                                <label for="email">Pan Card</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" required name="ac_num" id="account"
+                                    placeholder="Account Number">
+                                <label for="email">Account Number</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" required name="branch" id="bank_branch"
+                                    placeholder="Bank Branch ">
+                                <label for="email">Bank Branch</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" required name="ifsc" id="ifsc"
+                                    placeholder="IFSC Code">
+                                <label for="email">IFSC Code</label>
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="mt-5">Nominee Details</h6>
+                    <hr class="text-primary">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" required name="nomine" id="nominee"
+                                    placeholder="Name Of Nominee">
+                                <label for="email">Name of Nominee</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="file" class="form-control" name="id_card" id="id_card"
+                                    placeholder="Uplod ID Card Of Nomini">
+                                <label for="email">Upload ID Card Of Nominee</label>
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="mt-5">Site Credentials</h6>
+                    <hr class="text-primary">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="number" class="form-control" required name="pnum" id="phone"
+                                    placeholder="Phone Number">
+                                <label for="email">Phone Number</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="email" class="form-control" name="email" required id="email" placeholder="Email Id">
+                                <label for="email">Email Id</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="password" class="form-control" name="pswd" required id="pswd" placeholder="Password ">
+                                <label for="email">Password</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="cpassword" required id="cpassword"
+                                    placeholder="Confirm Password">
+                                <label for="email">Confirm Password</label>
+                            </div>
+                        </div>
+
+
+                        <div class="col-12">
+                            <button class="btn btn-primary rounded-pill py-3 px-5" type="submit">SignIn</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Registration End -->
+
+{% endblock %}

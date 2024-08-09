@@ -1,0 +1,129 @@
+{% extends 'index.html' %}{% load static %}{% block content %}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .image-gallery {
+        text-align: center;
+    }
+
+    .image-gallery img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .thumbnail-gallery img {
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    .product-title {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .rating {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .price {
+        font-size: 32px;
+        color: #ff5722;
+    }
+
+    .offers {
+        list-style-type: none;
+        padding: 0;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .offers li {
+        margin-bottom: 5px;
+    }
+
+    .buy-options button {
+        width: 100%;
+        margin-top: 10px;
+
+    }
+
+    .thumbnail-gallery img {
+        width: 70px;
+
+    }
+</style>
+<div class="container-fluid py-5 mt-5">
+    <div class="container-fluid">
+        <div class="row g-0 gx-5 align-items-end mt-5">
+            <div class="col-lg-12">
+                <div class="section-header text-start  wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <!-- <h1 class="h3 mb-3">Shopping Cart</h3> -->
+                    <!-- <p>Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p> -->
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="container mt-5">
+                    <div class="row">
+                        <!-- Image Gallery -->
+                        <div class="col-md-4">
+                            <div class="image-gallery row">
+                                <div class="thumbnail-gallery col-md-2 mb-2">
+                                    <img src="{{product.image_s1.url}}" class="img-thumbnail" alt="Thumbnail 1">
+                                    <img src="{{product.image_s2.url}}" class="img-thumbnail" alt="Thumbnail 2">
+                                    <img src="{{product.image_primary.url}}"  class="img-thumbnail" alt="Thumbnail 3">
+
+                                </div>
+                                <div class="primaryimage col-md-10">
+                                    <img src="{{product.image_primary.url}}" id="primaryImage" class="img-fluid mb-2"
+                                        alt="Main Product Image">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Product Details -->
+                        <div class="col-md-8">
+                            <h4 class="product-title">{{product.product_name}}
+                                <small>{{product.product_sub_name}}</small></h4>
+                            <div class="rating">
+                                <span>4.5★</span>
+                                <span>1,11,203 Ratings & 8,544 Reviews</span>
+                            </div>
+                            <p class="text-success">In Stock </p>
+                            <h3 class="price">₹{{product.price}} <span class="text-muted">and</span> <span
+                                    class="text-success">{{product.product_BV}} BV</span></h3>
+
+                            <p><b>Available offers</b></p>
+                            <ul class="offers">
+                                <li>{{product.description}}</li>
+                                <!-- <li>Bank Offer: ₹2000 Off On All Bank Credit and Debit Card Transactions</li>
+                                <li>Special Price: Get extra ₹4000 off (price inclusive of cashback/coupon)</li>
+                                <li>Freebie: Spotify Premium - 12M at ₹699</li> -->
+                            </ul>
+
+                            <div class="buy-options">
+                                <a href="{%url 'AddToCart' product.id %}" class="btn btn-warning btn-lg">Add To Cart</a>
+                                <a class="btn btn-outline-secondary btn-lg">Buy Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.thumbnail-gallery img').click(function () {
+            var newSrc = $(this).attr('src');
+            $('#primaryImage').attr('src', newSrc);
+        });
+    });
+</script>
+
+{% endblock %}

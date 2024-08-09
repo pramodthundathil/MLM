@@ -1,0 +1,157 @@
+<div class="cart-main-container row">
+    <div class="col-md-8">
+        <div class="cart-container">
+            <div class="cart-header">Shopping Cart</div>
+            <div>
+
+                {% for item in cart_items %}
+                <div class="cart-item">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="item-details ">
+                                <div class="row">
+                                    <div class="col-md-4 mb-2">
+                                        <img src="{{item.product.image_primary.url}}"
+                                            style="display: block;margin: auto;" width="120px" alt="">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="item-name">
+                                            {{item.product.product_name}}||
+                                            {{item.product.product_sub_name}}
+                                        </div>
+                                        <span>{{item.product.description}}</span>
+                                        <span></span>
+
+                                    </div>
+                                </div>
+
+                                <div class="input-group quantity mx-auto" style="width: 100px;">
+
+                                    <div class="input-group-btn">
+                                        <a class="btn btn-sm btn-primary btn-minus btn-decrease"
+                                            data-item-id="{{item.id}}">
+                                            <i class="fa fa-minus"></i>
+                                        </a>
+                                    </div>
+                                    <input type="text"
+                                        class="form-control form-control-sm bg-light border-0 text-center"
+                                        value="{{item.quantity}}">
+                                    <div class="input-group-btn">
+                                        <a class="btn btn-sm btn-primary btn-plus btn-increase"
+                                            data-item-id="{{item.id}}">
+                                            <i class="fa fa-plus"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="item-actions b-1">
+                                <div class="text-primary h6">BV: {{item.product.product_BV}}</div>
+                                <hr>
+                                <div class="item-price">₹{{item.product.price}}</div>
+                                <!-- <div class="item-old-price">M.R.P.: ₹30,335.00</div> -->
+                                <div class="h6" style="color: #b12704;">Total Amount:
+                                    ₹{{item.total_price}}</div>
+                                <div class="text-primary">Total BV:
+                                    <b>{{item.total_bv}}</b>
+                                </div>
+
+                                <div class="save-for-later mt-3">
+                                    <a class="text-secondary text-center" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal"><i class="bi bi-trash3-fill"
+                                            style="font-size: larger;"></i><br></a>
+                                    <!-- Button trigger modal -->
+
+
+
+                                    <!-- delete Modal -->
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+
+                                                <div class="modal-body" style="text-align: left !important;">
+                                                    Are you sure wan to delete from cart ?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="" class="btn btn-primary" data-dismiss="modal">No</a>
+                                                    <a href="{%url 'deletefrom_cart' item.id %}"
+                                                        class="btn btn-secondary">yes</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <br>
+                            <p><span>In stock | Shipping Charges ₹40 in Kerala ₹50 outside Kerala</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+            <div class="proceed-to-buy row">
+                <div class="subtotal col">Subtotal ({{total_items}} items): ₹{{total_price}}</div>
+                <div class="col text-right">
+                    <a href="{%url 'Place_Order_Start' %}" class="btn btn-warning text-right">Proceed to Buy</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="sidebar  mt-4 text-light">
+            <h3>Cart Toatal</h3>
+            <div class="sidebar-item mt-5">
+                <table class="table">
+                    <tr>
+                    <tr>
+                        <td>
+                            BV Value
+                        </td>
+                        <th>
+                            <div class="text-primary">{{bv}}</div>
+                        </th>
+                    </tr>
+                    <td>
+                        Amount
+                    </td>
+                    <th>
+                        <div class="price">₹{{total_price_defore_tax}}</div>
+                    </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            GST
+                        </td>
+                        <th>
+                            <div class="price"><small>₹{{total_tax}}</small></div>
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Total Amount
+                        </td>
+                        <th>
+                            <div class="price " style="font-size: larger;">₹{{total_price}}</div>
+                        </th>
+                    </tr>
+
+                </table>
+
+            </div>
+            <div class="d-grid gap-2 mt-3">
+                <a href="{%url 'Place_Order_Start' %}" class="btn btn-warning">Proceed To Pay</a>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,567 @@
+{% extends 'index.html' %}{% load static %}{% block content %}
+
+<style>
+    /*Now the CSS*/
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .tree ul {
+        padding-top: 20px;
+        position: relative;
+
+        transition: all 0.5s;
+        -webkit-transition: all 0.5s;
+        -moz-transition: all 0.5s;
+    }
+
+    .tree li {
+        float: left;
+        text-align: center;
+        list-style-type: none;
+        position: relative;
+        padding: 20px 5px 0 5px;
+
+        transition: all 0.5s;
+        -webkit-transition: all 0.5s;
+        -moz-transition: all 0.5s;
+    }
+
+    /*We will use ::before and ::after to draw the connectors*/
+
+    .tree li::before,
+    .tree li::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 50%;
+        border-top: 1px solid #ccc;
+        width: 50%;
+        height: 20px;
+    }
+
+    .tree li::after {
+        right: auto;
+        left: 50%;
+        border-left: 1px solid #ccc;
+    }
+
+    /*We need to remove left-right connectors from elements without 
+any siblings*/
+    .tree li:only-child::after,
+    .tree li:only-child::before {
+        display: none;
+    }
+
+    /*Remove space from the top of single children*/
+    .tree li:only-child {
+        padding-top: 0;
+    }
+
+    /*Remove left connector from first child and 
+right connector from last child*/
+    .tree li:first-child::before,
+    .tree li:last-child::after {
+        border: 0 none;
+    }
+
+    /*Adding back the vertical connector to the last nodes*/
+    .tree li:last-child::before {
+        border-right: 1px solid #ccc;
+        border-radius: 0 5px 0 0;
+        -webkit-border-radius: 0 5px 0 0;
+        -moz-border-radius: 0 5px 0 0;
+    }
+
+    .tree li:first-child::after {
+        border-radius: 5px 0 0 0;
+        -webkit-border-radius: 5px 0 0 0;
+        -moz-border-radius: 5px 0 0 0;
+    }
+
+    /*Time to add downward connectors from parents*/
+    .tree ul ul::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        border-left: 1px solid #ccc;
+        width: 0;
+        height: 20px;
+    }
+
+    .tree li a {
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+        text-decoration: none;
+        color: #666;
+        font-family: arial, verdana, tahoma;
+        font-size: 11px;
+        display: inline-block;
+        width: 100px;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+
+        transition: all 0.5s;
+        -webkit-transition: all 0.5s;
+        -moz-transition: all 0.5s;
+    }
+
+    /*Time for some hover effects*/
+    /*We will apply the hover effect the the lineage of the element also*/
+    .tree li a:hover,
+    .tree li a:hover+ul li a {
+        background: #c8e4f8;
+        color: #000;
+        border: 1px solid #94a0b4;
+    }
+
+    /*Connector styles on hover*/
+    .tree li a:hover+ul li::after,
+    .tree li a:hover+ul li::before,
+    .tree li a:hover+ul::before,
+    .tree li a:hover+ul ul::before {
+        border-color: #94a0b4;
+    }
+
+
+    /* /Now the CSS/ */
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        overflow-x: scroll;
+        display: flex;
+        justify-content: center;
+    }
+
+    .tree ul li:first-child {
+        width: max-content;
+        height: 100%;
+    }
+
+    .tree ul {
+        padding-top: 20px;
+        position: relative;
+        white-space: nowrap;
+        transition: all 0.5s;
+        -webkit-transition: all 0.5s;
+        -moz-transition: all 0.5s;
+    }
+
+    .tree li {
+        float: left;
+        text-align: center;
+        list-style-type: none;
+        position: relative;
+        padding: 20px 10px 0 10px;
+
+        transition: all 0.5s;
+        -webkit-transition: all 0.5s;
+        -moz-transition: all 0.5s;
+    }
+
+    /* /We will use ::before and ::after to draw the connectors/ */
+
+    .tree li::before,
+    .tree li::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 50%;
+        border-top: 1px solid #ccc;
+        width: 50%;
+        height: 20px;
+    }
+
+    .tree li::after {
+        right: auto;
+        left: 50%;
+        border-left: 1px solid #ccc;
+    }
+
+    /*We need to remove left-right connectors from elements without 
+                        any siblings*/
+    .tree li:only-child::after,
+    .tree li:only-child::before {
+        display: none;
+    }
+
+    /* /Remove space from the top of single children/ */
+    .tree li:only-child {
+        padding-top: 0;
+    }
+
+    /*Remove left connector from first child and 
+                        right connector from last child*/
+    .tree li:first-child::before,
+    .tree li:last-child::after {
+        border: 0 none;
+    }
+
+    /* /Adding back the vertical connector to the last nodes/ */
+    .tree li:last-child::before {
+        border-right: 1px solid #ccc;
+        border-radius: 0 5px 0 0;
+        -webkit-border-radius: 0 5px 0 0;
+        -moz-border-radius: 0 5px 0 0;
+    }
+
+    .tree li:first-child::after {
+        border-radius: 5px 0 0 0;
+        -webkit-border-radius: 5px 0 0 0;
+        -moz-border-radius: 5px 0 0 0;
+    }
+
+    /* /Time to add downward connectors from parents/ */
+    .tree ul ul::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        border-left: 1px solid #ccc;
+        width: 0;
+        height: 20px;
+    }
+
+    .tree li a {
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+        text-decoration: none;
+        color: #666;
+        font-family: arial, verdana, tahoma;
+        font-size: 11px;
+        display: inline-block;
+        width: 100px;
+
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+
+        transition: all 0.5s;
+        -webkit-transition: all 0.5s;
+        -moz-transition: all 0.5s;
+    }
+
+    /* /Time for some hover effects/ */
+    /* /We will apply the hover effect the the lineage of the element also/ */
+    .tree li a:hover,
+    .tree li a:hover+ul li a {
+        background: #c8e4f8;
+        color: #000;
+        border: 1px solid #94a0b4;
+    }
+
+    /* /Connector styles on hover/ */
+    .tree li a:hover+ul li::after,
+    .tree li a:hover+ul li::before,
+    .tree li a:hover+ul::before,
+    .tree li a:hover+ul ul::before {
+        border-color: #94a0b4;
+    }
+
+    .Inactive {
+        color: red !important;
+        font-weight: 700;
+    }
+
+    .Active {
+        color: green !important;
+        font-weight: 700;
+    }
+
+    .FreeId {
+        color: rgb(190, 108, 0) !important;
+        color: rgb(248, 201, 91) !important;
+        font-weight: 700;
+    }
+
+    .gen-title {
+        position: fixed !important;
+        top: 10vh;
+        right: auto;
+        left: auto;
+    }
+</style>
+
+<div class="container-fluid py-6 bg-light mt-5">
+    <div class="container mt-4">
+        <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s"
+            style="max-width: 500px;">
+            <h1 class="display-6 mb-3">My Profile</h1>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-12 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="bg-white text-center h-100 p-4 p-xl-5">
+                    <img class="img-fluid mb-4" src="img/icon-1.png" alt="">
+                    <h5 class="mb-3">Profile Data</h5>
+                    <hr>
+                    <div class="pd-20 card-box height-100-p">
+                        <div class="profile-photo">
+                            <a href="modal" data-toggle="modal" data-target="#modal" class="edit-avatar"><i
+                                    class="fa fa-pencil"></i></a>
+                            <img src="{%static 'vendors/images/photo1.jpg' %}" height="100px" alt=""
+                                class="avatar-photo">
+                        </div>
+                        <h5 class="text-center h5 mb-0">{{request.user.first_name}} {{request.user.last_name}}</h5>
+                        <p class="text-center text-muted font-14">Username: {{request.user}}</p>
+                        <h6>
+                            {% if request.user.bv_active_status == False %}
+                            <img src="{%static 'img/level_1_badge.png' %}" width="50px" alt="">
+                            {% else %}
+                            {% if request.user.designation == "Executive" %}
+                            <img src="{%static 'img/level_2_badge.png' %}" width="50px" alt="">
+                            {% elif request.user.designation == "Cheif Executive" %}
+                            <img src="{%static 'img/level_3_badge.png' %}" width="50px" alt="">
+
+                            {% elif request.user.designation == "Manager" %}
+                            <img src="{%static 'img/level_4_badge.png' %}" width="50px" alt="">
+                            {% elif request.user.designation == "General Manager" %}
+                            <img src="{%static 'img/level_5_badge.png' %}" width="50px" alt="">
+                            {% elif request.user.designation == "Director" %}
+                            <img src="{%static 'img/level_6_badge.png' %}" width="50px" alt="">
+                            {% endif %}
+                            {% endif %}
+
+                            {{request.user.designation}}
+                            {% if request.user.bv_active_status == False %}
+                            <span class="badge bg-warning">Not Active</span>
+                            {% else %}
+                            <span class="badge bg-primary">Active</span>
+                            {% endif %}
+
+                        </h6>
+                        <div class="bv-details mt-5">
+
+                            <h4>Total Purchase BV: <span class="text-primary">{{BV.purchase_bv}}</span></h4>
+                            <div class="row mb-3" style="font-size: x-small;padding: 10px;border: .5px solid gray;">
+                                <div class="col" style="border-right: .5px solid gray;">
+                                    Total Refetel Bv:
+                                    <br>
+                                    <h6 class="text-info">{{BV.total_bv}}</h6>
+                                </div>
+                                <div class="col" style="border-right: .5px solid gray;">
+                                    Total Withdwen:
+                                    <br>
+                                    <h6 class="text-primary">{{BV.bv_amount}}</h6>
+                                </div>
+                                <div class="col">
+                                    Balance BV:
+                                    <br>
+                                    <h6 class="text-warning">{{BV.balance_bv}}</h6>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="profile-info mt-2">
+                            <h5 class="mb-20 h5 text-blue">Personal Information</h5>
+                            <hr>
+                            <table class="table table-stripped text-left" style="font-size:small;">
+                                <tr>
+                                    <td>Email:</td>
+                                    <th>{{request.user}}</th>
+                                </tr>
+                                <tr>
+                                    <td>Phone Number:</td>
+                                    <th>{{request.user.phone_number}}</th>
+                                </tr>
+                                <tr>
+                                    <td>District:</td>
+                                    <th>{{request.user.district}}</th>
+                                </tr>
+                                <tr>
+                                    <td>Villege</td>
+                                    <th>{{request.user.address}}</th>
+                                </tr>
+                            </table>
+
+                        </div>
+                        <div class="profile-social">
+                            <h5 class="mb-20 h5 text-blue">Bank Details</h5>
+                            <hr>
+                            <table class="table table-stripped" style="font-size:small;">
+                                <tr>
+                                    <td>Account Number</td>
+                                    <th>
+                                        {{bankdetails.account_number}}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        IFSC Code
+                                    </td>
+                                    <th>
+                                        {{bankdetails.ifsc_code}}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>PANCARD Number</td>
+                                    <th>
+                                        {{request.user.pancard}}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>Branch</td>
+                                    <th>
+                                        {{bankdetails.branch_name}}
+                                    </th>
+                                </tr>
+
+                            </table>
+
+                        </div>
+                        <div class="reflink">
+                            <h5 class="mb-20 h5 text-blue">Reference Link</h5>
+                            <hr>
+                            <form method="post" action="{%url 'SentRefrelLink' %}">
+                                {% csrf_token %}
+                                <label for="">Send Reference link Via Email</label>
+                                <input type="email" name="email" placeholder="Enter Email Id For Invitation"
+                                    class="form-control"><br>
+                                <button class="btn btn-primary">Send Reference Link</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-lg-8 col-md-12 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="bg-white text-center h-100 p-4 p-xl-5">
+                    <img class="img-fluid mb-4" src="img/icon-2.png" alt="">
+                    <h4 class="mb-3">Genealogy</h4>
+                    <p class="mb-4">Your Genealogy will Display Here</p>
+                    <main class="main-content" style="margin: auto; align-items: center;">
+                        <div class="tree mt-5">
+                            <ul>
+                                <li>
+                                    <a class="user text-primary" id="user-{{ request.user.id }}"
+                                        data-user-id="{{ request.user.id }}" style="font-weight: 700;">
+                                        <img src="{% static 'img/avathar.png' %}" alt="" width="30px"> <br> {{request.user.first_name }} <br>
+                                        <span class="badge bg-warning text-light ms-1"
+                                            style="background: #6b1010 !important;">view</span>
+                                    </a>
+                                    <!-- <ul>
+                                        Sub-tree structure will be dynamically generated here
+                                        <li>
+                                            <a href="#" class="left-user">
+                                                <img src="{% static 'img/avathar.png' %}" alt="" width="30px"> <br>
+                                                <button style="background:green;border-radius:5px;color:#fff;padding: 5px 5px;border:none;margin-top:10px">Add User</button>
+                                            </a>
+                                        </li>
+                                    </ul> -->
+                                </li>
+                            </ul>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        console.log("ajax loadeddd....")
+        $("li .user").on("click", function (e) {
+            console.log("Id clicked....")
+            e.preventDefault();
+            var parentNode = $(this).parent('li');
+            var userId = $(this).data('user-id');
+            console.log("Id clicked...."+ userId)
+
+            if (parentNode.children('ul').length === 0) {
+                $.ajax({
+                    
+                    url: "{% url 'get_child_users' 1 %}",
+                    type: 'POST',
+                    data: {userId: userId},
+                    success: function(response) {
+                        generateChildNodes(parentNode, response);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching data:', error);
+                    }
+                
+                });
+                console.log("ajax workinginnnnn")
+            }
+        });
+
+        function generateChildNodes(parentNode, children) {
+            console.log(children,"-----------------------")
+            var childNodesHtml = '<ul>';
+            $.each(children, function(index, child) {
+                childNodesHtml += '<li>';
+                childNodesHtml += '<a id="user-' + child.id + '"  class="user ' + child.status + '" data-user-id="' + child.id + '">';
+                childNodesHtml += '<img src="{% static "img/avathar.png" %}" alt="" width="30px"> <br>' + child.first_name;
+                childNodesHtml += '<br><span class="badge bg-warning text-light ms-1" style="background: #6b1010 !important;">HOMEA ' + child.left_count + '</span>';
+                childNodesHtml += '<span class="badge bg-warning text-light ms-1" style="background: #6b1010 !important;">HOMEB ' + child.right_count + '</span>';
+                childNodesHtml += '</a>';
+                childNodesHtml += '</li>';
+            });
+            childNodesHtml += '</ul>';
+
+            parentNode.append(childNodesHtml);
+        }
+    });
+</script> -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            console.log("ajax loaded...");
+
+            // Use event delegation to handle click events on dynamically added elements
+            $('body').on('click', 'li .user', function (e) {
+                console.log("Id clicked...");
+                e.preventDefault();
+                var parentNode = $(this).parent('li');
+                var userId = $(this).data('user-id');
+                console.log("Id clicked: " + userId);
+
+                if (parentNode.children('ul').length === 0) {
+                    $.ajax({
+                        url: "{% url 'get_child_users' 1 %}", // Assuming this is the URL pattern
+                        type: 'POST',
+                        data: { userId: userId },
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        success: function (response) {
+                            generateChildNodes(parentNode, response);
+                        },
+                        error: function (error) {
+                            console.error('Error fetching data:', error);
+                        }
+                    });
+                    console.log("ajax working");
+                }
+            });
+
+            function generateChildNodes(parentNode, children) {
+                console.log(children, "-----------------------");
+                var childNodesHtml = '<ul>';
+                $.each(children, function (index, child) {
+                    childNodesHtml += '<li>';
+                    childNodesHtml += '<a id="user-' + child.id + '" class="user ' + child.status + '" data-user-id="' + child.id + '">';
+                    childNodesHtml += '<img src="{% static "img/avathar.png" %}" alt="" width="30px"> <br>' + child.first_name;
+                    childNodesHtml += '<br><span class="badge bg-warning text-light ms-1" style="background: #6b1010 !important;">View </span>';
+                    // childNodesHtml += '<span class="badge bg-warning text-light ms-1" style="background: #6b1010 !important;">HOMEB ' + child.right_count + '</span>';
+                    childNodesHtml += '</a>';
+                    childNodesHtml += '</li>';
+                });
+                childNodesHtml += '</ul>';
+
+                parentNode.append(childNodesHtml);
+            }
+        });
+    </script>
+
+    {% endblock %}

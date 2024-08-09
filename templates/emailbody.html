@@ -1,0 +1,14 @@
+{% autoescape off %}
+ Hi ,
+ 
+ Your are Invited To Join Direct Selling Employees Society by Mr.{{user.first_name}}.
+ Please click on the link to confirm your registration,
+ http://{{ domain }}{% url 'SignUp' token %}
+ 
+ 
+  do not share your password to anyone 
+ 
+  Happy shopping...
+    ADCOS
+  
+  {% endautoescape %}

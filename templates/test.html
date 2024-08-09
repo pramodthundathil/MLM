@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+    background-color: #f8f9fa;
+}
+
+.image-gallery {
+    text-align: center;
+}
+
+.image-gallery img {
+    max-width: 100%;
+    height: auto;
+}
+
+.thumbnail-gallery img {
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.product-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.rating {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.price {
+    font-size: 32px;
+    color: #ff5722;
+}
+
+.offers {
+    list-style-type: none;
+    padding: 0;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.offers li {
+    margin-bottom: 5px;
+}
+
+.buy-options button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Image Gallery -->
+            <div class="col-md-4">
+                <div class="image-gallery">
+                    <img src="main-image.jpg" class="img-fluid mb-2" alt="Main Product Image">
+                    <div class="thumbnail-gallery">
+                        <img src="thumb1.jpg" class="img-thumbnail" alt="Thumbnail 1">
+                        <img src="thumb2.jpg" class="img-thumbnail" alt="Thumbnail 2">
+                        <img src="thumb3.jpg" class="img-thumbnail" alt="Thumbnail 3">
+                        <img src="thumb4.jpg" class="img-thumbnail" alt="Thumbnail 4">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Details -->
+            <div class="col-md-8">
+                <h4 class="product-title">vivo T2 Pro 5G (Dune Gold, 256 GB) (8 GB RAM)</h4>
+                <div class="rating">
+                    <span>4.5★</span>
+                    <span>1,11,203 Ratings & 8,544 Reviews</span>
+                </div>
+                <p class="text-success">Extra ₹4000 off</p>
+                <h3 class="price">₹23,999 <span class="text-muted"><del>₹27,999</del></span> <span class="text-success">14% off</span></h3>
+
+                <p><b>Available offers</b></p>
+                <ul class="offers">
+                    <li>Bank Offer: 5% Cashback on Flipkart Axis Bank Card</li>
+                    <li>Bank Offer: ₹2000 Off On All Bank Credit and Debit Card Transactions</li>
+                    <li>Special Price: Get extra ₹4000 off (price inclusive of cashback/coupon)</li>
+                    <li>Freebie: Spotify Premium - 12M at ₹699</li>
+                </ul>
+
+                <div class="buy-options">
+                    <button class="btn btn-warning btn-lg">Buy without Exchange</button>
+                    <button class="btn btn-outline-secondary btn-lg">Buy with Exchange</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

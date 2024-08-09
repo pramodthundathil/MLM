@@ -1,0 +1,213 @@
+{% extends 'index.html' %}{%load static%}{% block content %}
+<style>
+    .cart-container {
+        width: 100%;
+        margin: 30px auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-header {
+        font-size: 24px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .cart-item {
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .item-details {
+        width: 75%;
+    }
+
+    .item-name {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .item-name img {
+        float: left;
+        margin-right: 20px;
+    }
+
+    .item-details span {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .item-actions {
+        width: 100%;
+        text-align: right;
+        padding: 20px;
+    }
+
+    .item-price {
+        font-size: 20px;
+        color: #b12704;
+        margin-bottom: 5px;
+    }
+
+    .item-old-price {
+        text-decoration: line-through;
+        color: #767676;
+        font-size: 14px;
+    }
+
+    .proceed-to-buy {
+
+        align-items: center;
+        padding: 20px 0;
+        border-top: 2px solid #eee;
+    }
+
+    .subtotal {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .proceed-button {
+        background-color: #ffd814;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .proceed-button:hover {
+        background-color: #f7ca00;
+    }
+
+    .emi {
+        color: #007185;
+        font-size: 14px;
+        margin-top: 10px;
+        display: block;
+    }
+
+    .sidebar {
+        /* width: 30%; */
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        height: auto;
+    }
+
+    .sidebar h3 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .sidebar-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .sidebar-item img {
+        max-width: 50px;
+        margin-right: 10px;
+    }
+
+    .sidebar-item span {
+        font-size: 14px;
+    }
+
+    .sidebar-item .price {
+        font-weight: bold;
+        color: #b12704;
+    }
+
+    .sidebar-item .add-to-cart {
+        background-color: #ffd814;
+        border: none;
+        padding: 5px 10px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .sidebar-item .add-to-cart:hover {
+        background-color: #f7ca00;
+    }
+
+    .cart-main-container {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+<div class="container-fluid py-5 mt-5">
+    <div class="container-fluid">
+        <div class="row g-0 gx-5 align-items-end mt-5">
+            <div class="col-lg-12">
+                <div class="section-header text-start  wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <h3 class="h3 mb-3">Shopping Cart</h3>
+                        {% for message in messages %}
+
+                        <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
+                            <strong>Alert!</strong> {{message}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                        <!-- <p>Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p> -->
+                </div>
+            </div>
+            <div class="col-lg-12" id="order-summary">
+                {% include 'ajaxtemplates/cartitems.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        console.log("ajax loded.......")
+        $(document).on("click", ".btn-increase", function () {
+            var itemId = $(this).data("item-id");
+
+            $.ajax({
+                url: "{% url 'increase_quantity' %}",
+                type: "POST",
+                data: {
+                    'item_id': itemId,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    $("#order-summary").html(response.order_html);
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        });
+
+        $(document).on("click", ".btn-decrease", function () {
+            var itemId = $(this).data("item-id");
+
+            $.ajax({
+                url: "{% url 'decrease_quantity' %}",
+                type: "POST",
+                data: {
+                    'item_id': itemId,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (response) {
+                    $("#order-summary").html(response.order_html);
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+
+{% endblock %}

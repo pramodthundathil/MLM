@@ -1,0 +1,244 @@
+{% extends 'dashboard/index.html' %}{% load static %}{% block admin %}
+<link rel="stylesheet" href="{%static 'dashboard/css/dataTables.bootstrap4.css' %}">
+
+<main role="main" class="main-content">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <h2 class="mb-2 page-title">Prduct List</h2>
+         
+          <!-- <p class="card-text">DataTables is a plug-in for the jQuery Javascript library. It is a highly flexible tool, built upon the foundations of progressive enhancement, that adds all of these advanced features to any HTML table. </p> -->
+          <div class="row my-4">
+                <div class="col-12">
+                  <div class="row align-items-center my-4">
+                    <div class="col">
+                      <!-- <h2 class="h3 mb-0 page-title">Contacts</h2> -->
+                      {% for message in messages %}
+                      <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
+                        <strong>Alart</strong> {{message}} <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-auto">
+                      
+                      <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#defaultModal"><span class="fe fe-filter fe-12 mr-2"></span>Create New Product</button>
+
+                      <!-- Modal -->
+                      <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="defaultModalLabel">Add New Product</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body"> 
+
+
+                                <!-- product adding form inside model stats  -->
+
+                                <form method="post" enctype="multipart/form-data" data-toggle="validator">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Item Name *</label>
+                                                <input type="text" name="name" class="form-control" placeholder="Enter Name" data-errors="Please Enter Name." required>
+                                                <div class="help-block with-errors"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Item Sub Name <sup>(Optional)</sup></label>
+                                                <input type="text" name="sub_name" class="form-control" placeholder="Enter Sub Name" data-errors="Please Enter Name.">
+                                                <div class="help-block with-errors"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Category *</label>
+                                                <select name="category" class="selectpicker form-control" data-style="py-0" required>
+                                                    <option selected disabled>Select Category</option>
+                                                    {% for i in food_category %}
+                                                    <option value="{{i.id}}"><img src="{{i.image.url}}" width="50px" height="50px" alt="">{{i}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div> 
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Price *</label>
+                                                <input type="number" class="form-control" placeholder="Enter MRP " data-errors="Please Enter Price." name="price" required>
+                                                <div class="help-block with-errors"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Business Volume (BV) *</label>
+                                                <input type="number" class="form-control" placeholder="Enter BV" data-errors="Please Enter Price." name="bv" required>
+                                                <div class="help-block with-errors"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Primary Image *</label>
+                                                <input type="file" class="form-control image-file" name="primary_image" accept="image/*" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Secondary Image 1</label>
+                                                <input type="file" class="form-control image-file" name="secondary_image1" accept="image/*">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Secondary Image 2</label>
+                                                <input type="file" class="form-control image-file" name="secondary_image2" accept="image/*">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Stock *</label>
+                                                <input type="number" name="stock" class="form-control" placeholder="Enter Stock" required>
+                                                <div class="help-block with-errors"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Stock Alert Value *</label>
+                                                <input type="number" name="stock_alert" value="0" class="form-control" placeholder="Enter Stock" required>
+                                                <div class="help-block with-errors"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Tax Method *</label>
+                                                <select name="tax_name" class="selectpicker form-control" required data-style="py-0">
+                                                    <option disabled value="Exclusive">Exclusive</option>
+                                                    <option selected value="Inclusive">Inclusive</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Tax Value <small>(in Percentage %)</small> *</label>
+                                                <select name="tax_value" required class="selectpicker form-control" data-style="py-0">
+                                                    <option selected disabled>--------------------------------------</option>
+                                                    {% for t in tax %}
+                                                    <option value="{{t.id}}">{{t}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Description / Product Details</label>
+                                                <textarea class="form-control" name="description" rows="4"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mr-2">Add Product</button>
+                                    <button type="reset" class="btn btn-danger">Reset</button>
+                                </form>
+                                
+                                <!-- product adding form inside model end  -->
+
+                            </div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            <!-- Small table -->
+            <div class="col-md-12">
+              <div class="card shadow">
+                <div class="card-body">
+                  <!-- table -->
+                  <table class="table table-striped datatables" id="dataTable-1">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Product name</th>
+                        <th>MRP</th>
+                        <th>GST</th>
+                        <th>BV Value</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in product%}
+                      <tr>
+                        
+                        <td>{{forloop.counter}}</td>
+                        <td>{{item.product_name}}</td>
+                        <td>{{item.price}}</td>
+                        <td>{{item.tax_amount}}</td>
+                        <td>{{item.product_BV}}</td>
+                        <td>{{item.description}}</td>
+                        <td>{{item.category}}</td>
+                        <td>{{item.stock}}</td>
+                        <td><button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="text-muted sr-only">Action</span>
+                          </button>
+                          <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#">Edit</a>
+                            <a class="dropdown-item" href="#">Remove</a>
+                            <a class="dropdown-item" href="#">Assign</a>
+                          </div>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div> <!-- simple table -->
+          </div> <!-- end section -->
+        </div> <!-- .col-12 -->
+      </div> <!-- .row -->
+    </div> <!-- .container-fluid -->
+    
+</main>
+<script src="{%static 'dashboard/js/jquery.min.js' %}"></script>
+<script src="{%static 'dashboard/js/popper.min.js' %}' "></script>
+<script src="{%static 'dashboard/js/moment.min.js' %}"></script>
+<script src="{%static 'dashboard/js/bootstrap.min.js'%}"></script>
+<script src="{%static 'dashboard/js/simplebar.min.js' %}"></script>
+<script src="{%static 'dashboard/js/daterangepicker.js' %}"></script>
+<script src="{%static 'dashboard/js/jquery.stickOnScroll.js' %}"></script>
+<script src="{%static 'dashboard/js/tinycolor-min.js' %}"></script>
+<script src="{%static 'dashboard/js/config.js' %}"></script>
+
+<script src='{%static "dashboard/js/jquery.dataTables.min.js" %}'></script>
+    <script src='{%static "dashboard/js/dataTables.bootstrap4.min.js" %}'></script>
+<script>
+    $('#dataTable-1').DataTable(
+    {
+      autoWidth: true,
+      "lengthMenu": [
+        [16, 32, 64, -1],
+        [16, 32, 64, "All"]
+      ]
+    });
+  </script>
+  
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag()
+    {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'UA-56159088-1');
+  </script>
+
+{% endblock %}
