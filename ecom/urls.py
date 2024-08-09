@@ -11,6 +11,8 @@ urlpatterns = [
     path('decrease_quantity', views.decrease_quantity, name='decrease_quantity'),
     path('deletefrom_cart/<int:pk>', views.deletefrom_cart, name='deletefrom_cart'),
     path('Place_Order_Start', views.Place_Order_Start, name='Place_Order_Start'),
+    path("Paymentoptions/<int:pk>",views.Paymentoptions,name="Paymentoptions"),
+    path("PlaceOrder",views.PlaceOrder,name="PlaceOrder"),
     
-
+    path("myorders",views.myorders,name="myorders"),
 ]

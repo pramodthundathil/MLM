@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 # views.py
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from datetime import datetime
 
 
 
@@ -267,5 +268,66 @@ def Place_Order_Start(request):
     else:
         messages.info(request,"Your cart is empty to place order !!")
         return redirect("Cart_Page")
+    
+def Paymentoptions(request,pk):
+    order = Order.objects.get(id = pk)
+    total_items = OrderItems.objects.filter(order = order).count()
+
+    context = {
+        "order":order,
+        "total_items":total_items
+    }
+    return render(request,"paymentoptions.html",context)
+
+def generate_serial_number():
+        current_time = datetime.now()
+        serial_number = current_time.strftime("%Y%m%d%H%M%S")
+        return serial_number
+    
+
+def PlaceOrder(request):
+    D_address = DeliveryAddress.objects.filter(user = request.user).last()
+    cart_items = Cart.objects.filter(user = request.user)
+    total_price = 0.0
+    total_tax = 0.0
+    bv = 0
+    for item in cart_items:  
+        total_price += item.total_price
+        total_tax += item.quantity * item.product.tax_amount
+        bv += item.total_bv
+
+    order = Order.objects.create(
+        order_numer = generate_serial_number(),
+        user = request.user,
+        order_amount = total_price,
+        order_bv = bv,
+        order_tax  = total_tax,
+        delivery_address = D_address,
+        delivery_history_address = str(D_address)
+
+    )
+    order.save()
+    for item in cart_items:
+        orderitem = OrderItems.objects.create(
+            order = order,
+            product = item.product,
+            user = request.user,
+            quantity = item.quantity,
+            total_price = item.total_price,
+            total_bv = item.total_bv
+        )
+        orderitem.save()
+        item.delete()
+    messages.info(request,'Order Created')
+
+    return redirect("Paymentoptions",pk = order.id)
+
+def myorders(request):
+    orders = Order.objects.filter(user = request.user)
+
+    context = {
+        "orders":orders
+    }
+    return render(request,'myorders.html',context)
 
    

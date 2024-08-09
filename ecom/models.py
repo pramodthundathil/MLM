@@ -112,6 +112,9 @@ class DeliveryAddress(models.Model):
     landmark = models.TextField(null=True, blank=True)
     phone_number = models.CharField(max_length=20)
 
+    def __str__(self):
+        return str(self.first_name + self.house_house + self.Place + self.City + self.district)
+
 
 class Order(models.Model):
     order_numer = models.CharField(max_length=20)
