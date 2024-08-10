@@ -74,17 +74,7 @@
                     <a href="{%url 'about' %}" class="nav-item nav-link" style="font-weight: 600 !important;">About Us</a>
                     <a href="{%url 'ProductList' %}" class="nav-item nav-link"
                         style="font-weight: 600 !important;">Products</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" style="font-weight: 600 !important;"
-                            data-bs-toggle="dropdown">My Orders </a>
-                        <div class="dropdown-menu m-0">
-                            <a href="{%url 'myorders' %}" class="dropdown-item">Orders</a>
-                            <a href="feature.html" class="dropdown-item">Cart</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                            <a href="404.html" class="dropdown-item">404 Page</a>
-                        </div>
-                    </div>
-
+                    
                     <div class="d-lg-flex ms-2">
 
                         {% if request.user.is_authenticated %}
@@ -92,6 +82,17 @@
                         <a href="{%url 'AdminDashView' %}" class="nav-item nav-link"
                             style="font-weight: 600 !important;"><i class="bi bi-speedometer"></i> Admin Dash Board</a>
                         {% endif %}
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" style="font-weight: 600 !important;"
+                                data-bs-toggle="dropdown">My Orders </a>
+                            <div class="dropdown-menu m-0">
+                                <a href="{%url 'myorders' %}" class="dropdown-item">Orders</a>
+                                <a href="feature.html" class="dropdown-item">Cart</a>
+                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                                <a href="404.html" class="dropdown-item">404 Page</a>
+                            </div>
+                        </div>
+    
 
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link  " style="font-weight: 600 !important;"

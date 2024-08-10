@@ -6,9 +6,13 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from datetime import datetime
+from Home.models import *
 
 
 
+
+
+@login_required(login_url='SignIn')
 def Products(request):
     product = Product.objects.all()
     if request.method == 'POST':
@@ -73,7 +77,7 @@ def Products(request):
 
 
 def ProductList(request):
-    product = Product.objects.all()[:9]
+    product = Product.objects.all()
 
     context = {
         "products":product
@@ -87,6 +91,8 @@ def ProductSingle(request,pk):
     }
     return render(request,'productsingle.html',context)
 
+
+@login_required(login_url='SignIn')
 def Cart_Page(request):
     cart_items = Cart.objects.filter(user=request.user)
     # Initialize total price and total tax
@@ -113,6 +119,7 @@ def Cart_Page(request):
     return render(request,"cart.html",context)
 
 
+@login_required(login_url='SignIn')
 def AddToCart(request,pk):
     product = Product.objects.get(id = pk)
     try:
@@ -214,7 +221,8 @@ def decrease_quantity(request):
         order_html = render_to_string('ajaxtemplates/cartitems.html', context)
         
         return JsonResponse({'order_html': order_html})
-    
+
+@login_required(login_url='SignIn')    
 def deletefrom_cart(request,pk):
     try:
         Cart.objects.get(id = pk).delete()
@@ -224,6 +232,8 @@ def deletefrom_cart(request,pk):
         messages.info(request,"Item Not deleted Somthing Wrong")
         return redirect("Cart_Page")
     
+    
+@login_required(login_url='SignIn')
 def Place_Order_Start(request):
     user = request.user
     if Cart.objects.filter(user = user).count() > 0:
@@ -269,6 +279,7 @@ def Place_Order_Start(request):
         messages.info(request,"Your cart is empty to place order !!")
         return redirect("Cart_Page")
     
+@login_required(login_url='SignIn')   
 def Paymentoptions(request,pk):
     order = Order.objects.get(id = pk)
     total_items = OrderItems.objects.filter(order = order).count()
@@ -281,6 +292,7 @@ def Paymentoptions(request,pk):
     }
     return render(request,"paymentoptions.html",context)
 
+@login_required(login_url='SignIn')
 def Deleteoreder(request,pk):
     order = Order.objects.get(id = pk)
     if order.payment_status == True or order.order_status == True or order.order_completion == True:
@@ -294,8 +306,9 @@ def generate_serial_number():
         current_time = datetime.now()
         serial_number = current_time.strftime("%Y%m%d%H%M%S")
         return serial_number
-    
 
+
+@login_required(login_url='SignIn')
 def PlaceOrder(request):
     D_address = DeliveryAddress.objects.filter(user = request.user).last()
     cart_items = Cart.objects.filter(user = request.user)
@@ -333,6 +346,8 @@ def PlaceOrder(request):
 
     return redirect("Paymentoptions",pk = order.id)
 
+
+@login_required(login_url='SignIn')
 def myorders(request):
     orders = Order.objects.filter(user = request.user)
     orderitems = OrderItems.objects.filter(user = request.user)
@@ -345,30 +360,57 @@ def myorders(request):
     }
     return render(request,'myorders.html',context)
 
+
+@login_required(login_url='SignIn')
 def MakeCashOnDelivery(request,pk):
     order = Order.objects.get(id = pk)
     order_items = OrderItems.objects.filter(order = order)
-    # order.order_completion = True
-    # order.payment_mode = "Cash On delivery"
-    # order.save()
+    order.order_completion = True
+    order.payment_mode = "Cash On delivery"
+    order.save()
 
-    # for i in order_items:
-    #     i.order_progress = "Ordered"
-    #     i.save()
+    for i in order_items:
+        i.order_progress = "Ordered"
+        i.save()
 
     member = order.user 
+    myBV = Business_Volume.objects.get(user = member)
+    myBV.purchase_bv += order.order_bv
+    myBV.save()
+
     order_BV = order.order_bv
     print(member,".................",order_BV)
     count = 0
+    sponser = member.parent
     for i in range(5):
         count += 1
         try:
-            parent = member.parent
-            print(parent)
-            if not parent:
-                print("no parent admin......1234")
+            bv_DB = Business_Volume.objects.get(user = sponser)
+            if count == 1:
+                print(count,"first refrel")
+                bv_DB.bv_amount += (order.order_bv)*25/100
+                bv_DB.save()
+            elif count == 2:
+                bv_DB.bv_amount += (order.order_bv)*12/100
+                bv_DB.save()
+
+            elif count == 3:
+                bv_DB.bv_amount += (order.order_bv)*10/100
+                bv_DB.save()
+
+            elif count == 4:
+                bv_DB.bv_amount += (order.order_bv)*6/100
+                bv_DB.save()
+
+            elif count == 5:
+                bv_DB.bv_amount += (order.order_bv)*2/100
+                bv_DB.save()
+
+            else:
+                break
         except:
             break
+        sponser = sponser.parent
 
     try:
         parent = member.parent
@@ -381,7 +423,7 @@ def MakeCashOnDelivery(request,pk):
     return redirect("OrderPlaced")
 
 
-
+@login_required(login_url='SignIn')
 def OrderPlaced(request):
     return render(request, 'orderplaced.html')
 
