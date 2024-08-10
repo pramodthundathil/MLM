@@ -127,11 +127,14 @@ class Order(models.Model):
     delivery_address = models.ForeignKey(DeliveryAddress, on_delete=models.SET_NULL, null=True)
     delivery_history_address = models.CharField(max_length=255, null=True, blank=True) 
 
+    order_completion = models.BooleanField(default=False)
+    
     payment_status = models.BooleanField(default=False)
     payment_mode = models.CharField(max_length=20, null=True, default='Cash On delivery')
     payment_ref_number = models.CharField(max_length=20, null=True, blank=True)
 
     order_status = models.BooleanField(default=False)
+
 
 
 class OrderItems(models.Model):
@@ -143,6 +146,14 @@ class OrderItems(models.Model):
     total_price = models.FloatField()
     total_bv = models.FloatField(default=0)
     status = models.BooleanField(default=True)
+    order_progress = models.CharField(max_length=20, choices=(
+                                                                ("Ordered","Ordered"),
+                                                                ("Accepted","Accepted"),
+                                                                ("Despached","Despached"),
+                                                                ("Out For Delivery","Out For Delivery"),
+                                                                ("Delivered","Delivered")
+                                                              ),
+                                                              default="Ordered")
 
 
     

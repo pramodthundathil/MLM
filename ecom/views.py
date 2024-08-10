@@ -272,12 +272,23 @@ def Place_Order_Start(request):
 def Paymentoptions(request,pk):
     order = Order.objects.get(id = pk)
     total_items = OrderItems.objects.filter(order = order).count()
+    D_address = order.delivery_address
 
     context = {
         "order":order,
-        "total_items":total_items
+        "total_items":total_items,
+        "D_address":D_address
     }
     return render(request,"paymentoptions.html",context)
+
+def Deleteoreder(request,pk):
+    order = Order.objects.get(id = pk)
+    if order.payment_status == True or order.order_status == True or order.order_completion == True:
+        messages.info(request,'You cannot delete placed Order')
+    else:
+        order.delete()
+        messages.success(request,"Order deleted")
+    return redirect("myorders")
 
 def generate_serial_number():
         current_time = datetime.now()
@@ -324,10 +335,57 @@ def PlaceOrder(request):
 
 def myorders(request):
     orders = Order.objects.filter(user = request.user)
+    orderitems = OrderItems.objects.filter(user = request.user)
+
+    print(orderitems,"------------------------------------------")
 
     context = {
-        "orders":orders
+        "orders":orders,
+        "orderitems":orderitems
     }
     return render(request,'myorders.html',context)
+
+def MakeCashOnDelivery(request,pk):
+    order = Order.objects.get(id = pk)
+    order_items = OrderItems.objects.filter(order = order)
+    # order.order_completion = True
+    # order.payment_mode = "Cash On delivery"
+    # order.save()
+
+    # for i in order_items:
+    #     i.order_progress = "Ordered"
+    #     i.save()
+
+    member = order.user 
+    order_BV = order.order_bv
+    print(member,".................",order_BV)
+    count = 0
+    for i in range(5):
+        count += 1
+        try:
+            parent = member.parent
+            print(parent)
+            if not parent:
+                print("no parent admin......1234")
+        except:
+            break
+
+    try:
+        parent = member.parent
+        print(parent)
+        if not parent:
+            print("no parent admin......1234")
+        
+    except:
+        print("no parent admin......")
+    return redirect("OrderPlaced")
+
+
+
+def OrderPlaced(request):
+    return render(request, 'orderplaced.html')
+
+
+    
 
    
